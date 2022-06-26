@@ -3,14 +3,15 @@ import { useReducer } from "react";
 
 const cartReducer = function (state, actions) {
   if (actions.type == "ADD") {
+    let updatedItems;
     const updatedTotalAmount =
       state.totalAmount + actions.item.item.price * actions.item.item.amount;
-    let updatedItems;
     const repeatedIndex = state.items.findIndex(
       (ele) => ele.item.id == actions.item.item.id
     );
+    console.log(repeatedIndex);
     const repeated = state.items[repeatedIndex];
-    // console.log(repeated);
+
     if (repeated) {
       const updatedItem = {
         item: {
@@ -26,10 +27,36 @@ const cartReducer = function (state, actions) {
       // we should use concat as it returns new array instead of using push(it doesnot returns new array instead it edits the value which is not visible to react )
     }
 
-    // console.log(actions.item.item.price, actions.item.item.amount);
+    return {
+      items: updatedItems,
+      totalAmount: updatedTotalAmount,
+    };
+  }
 
-    // console.log(updatedTotalAmount);
-    // console.log(updatedItems);
+  if (actions.type == "REMOVE") {
+    const repeatedIndex = state.items.findIndex(
+      (ele) => ele.item.id == actions.id.id
+    );
+    console.log(repeatedIndex);
+    const repeatedItem = state.items[repeatedIndex];
+    console.log(repeatedItem);
+    const updatedTotalAmount = state.totalAmount - repeatedItem.item.price;
+    let updatedItems;
+    if (repeatedItem.item.amount == 1) {
+      console.log("yes");
+      updatedItems = state.items.filter((ele) => ele.item.id != actions.id.id);
+    } else {
+      const updatedItem = {
+        item: {
+          ...repeatedItem.item,
+          amount: repeatedItem.item.amount - 1,
+        },
+      };
+
+      updatedItems = [...state.items];
+      updatedItems[repeatedIndex] = updatedItem;
+    }
+
     return {
       items: updatedItems,
       totalAmount: updatedTotalAmount,

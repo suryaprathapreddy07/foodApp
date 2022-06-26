@@ -13,14 +13,11 @@ const Cart = function (props) {
   const hasItems = cartCtx.items.length > 0;
 
   const addItemHandler = function (item) {
-    cartCtx.addItem(item.item);
+    // console.log(item);
+    cartCtx.addItem({ ...item, amount: 1 });
   };
   const removeItemHandler = function (id) {
-    const item = cartCtx.items.find((ele) => ele.item.id == id);
-    console.log(typeof cartCtx.items);
-    console.log(cartCtx.items);
-
-    cartCtx.items.remove(item);
+    cartCtx.removeItem(id);
   };
   const cartItems = (
     <ul className={classes["cart-items"]}>
@@ -30,7 +27,7 @@ const Cart = function (props) {
           price={item.item.price}
           name={item.item.name}
           amount={item.item.amount}
-          onAddItem={addItemHandler.bind(null, item)}
+          onAddItem={addItemHandler.bind(null, item.item)}
           onRemoveItem={removeItemHandler.bind(null, item.item.id)}
         ></CartItem>
       ))}
