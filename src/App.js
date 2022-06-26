@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, { Fragment, useState } from "react";
+import Cart from "./COMPONENTS/CART/cart";
+import Header from "./COMPONENTS/LAYOUT/header";
+import Meals from "./COMPONENTS/MEALS/meals";
+import CartProvider from "./STORE/cartContextProvider";
 function App() {
+  const [isCartShown, setIsCartShown] = useState(false);
+
+  const showCart = function () {
+    setIsCartShown(true);
+  };
+
+  const hideCart = function () {
+    setIsCartShown(false);
+  };
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key == "Escape") setIsCartShown(false);
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <CartProvider>
+      {isCartShown && <Cart onHideCart={hideCart}></Cart>}
+      <Header onShowCart={showCart}></Header>
+      <main>
+        <Meals></Meals>
+      </main>
+    </CartProvider>
   );
 }
 
